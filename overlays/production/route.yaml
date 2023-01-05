@@ -1,0 +1,6 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: nginx
+spec:
+  host: t-test-kustomize.2.rahtiapp.fi

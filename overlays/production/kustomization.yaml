@@ -1,0 +1,10 @@
+resources:
+- ../../base
+patchesStrategicMerge:
+- pvc.yaml
+- route.yaml
+
+configMapGenerator:
+- name: dbparams
+  files:
+  - db.yaml

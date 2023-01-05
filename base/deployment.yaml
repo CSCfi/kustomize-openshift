@@ -1,0 +1,52 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: nginx
+  name: nginx
+spec:
+  replicas: 1
+  selector:
+    app: nginx
+    deploymentconfig: nginx
+  strategy:
+    type: Rolling
+  template:
+    metadata:
+      labels:
+        app: nginx
+        deploymentconfig: nginx
+    spec:
+      containers:
+      - image: bitnami/nginx:latest
+        name: nginx
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        - containerPort: 8443
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 500m
+            memory: 500Mi
+          requests:
+            cpu: 50m
+            memory: 100Mi
+        volumeMounts:
+          - mountPath: /opt/bitnami/nginx/html/
+            name: html
+      volumes:
+      - name: html
+        persistentVolumeClaim:
+          claimName: html
+  triggers:
+  - type: ConfigChange
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - nginx
+      from:
+        kind: ImageStreamTag
+        name: nginx:latest
+        namespace: 
+    type: ImageChange
